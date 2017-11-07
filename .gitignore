@@ -1,32 +1,16 @@
-# Prerequisites
-*.d
+#######################
+# Unreal Engine Files #
+#######################
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+Build/
+Binaries/
+DerviedDataCache/
+Intermediate/
+Saved/
+Content/StarterContent
 
-# Precompiled Headers
-*.gch
-*.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+#######################
+# Visual Studio Files #
+#######################
+*.vc.db
