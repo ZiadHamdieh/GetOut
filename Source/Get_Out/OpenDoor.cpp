@@ -20,10 +20,16 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* Owner = GetOwner();
-	FRotator NewRotation = FRotator(0.f, -150.f, 0.f);				// Set yaw to open door at the start of the scene
+	AActor* Owner = GetOwner();									// Store memory address of door into Owner
+	FRotator NewRotation = FRotator(0.f, -150.f, 0.f);				// Set yaw to close door
 	Owner->SetActorRotation(NewRotation);
-	
+}
+
+void UOpenDoor::CloseDoor()
+{
+	AActor* Owner = GetOwner();									// Store memory address of door into Owner
+	FRotator NewRotation = FRotator(0.f, -90.f, 0.f);				// Set yaw to close door
+	Owner->SetActorRotation(NewRotation);
 }
 
 
@@ -32,6 +38,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	// Poll The Pressure Plate Trigger Volume
+	// If actor and pressure plate overlap (i.e. actor is inside the pressure plate), close the door
+	if (DoorClosePressurePlate->IsOverlappingActor(ActorThatCloses))
+	{
+		CloseDoor();
+	}
 }
 

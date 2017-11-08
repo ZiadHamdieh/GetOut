@@ -22,16 +22,21 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void CloseDoor();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY(VisibleAnywhere)				// Macro for closing the door
+	UPROPERTY(VisibleAnywhere)				
 	float DoorAngle = 45.f;					// Set initial door angle to 45 deg
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* DoorClosePressurePlate;	// Pressure plate that closes the door when player walks over it
+
+	UPROPERTY(EditAnywhere)
+	AActor* ActorThatCloses;
 
 	
 };
