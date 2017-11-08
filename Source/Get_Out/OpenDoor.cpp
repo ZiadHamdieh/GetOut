@@ -2,6 +2,7 @@
 
 #include "OpenDoor.h"
 #include "Gameframework/Actor.h"
+#include "Engine/World.h"
 
 
 // Sets default values for this component's properties
@@ -20,15 +21,18 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Find the PlayerController
+	ActorThatClosesDoor = GetWorld()->GetFirstPlayerController()->GetPawn();
+
 	AActor* Owner = GetOwner();									// Store memory address of door into Owner
-	FRotator NewRotation = FRotator(0.f, -150.f, 0.f);				// Set yaw to close door
+	FRotator NewRotation = FRotator(0.f, -150.f, 0.f);			// Set yaw to close door
 	Owner->SetActorRotation(NewRotation);
 }
 
 void UOpenDoor::CloseDoor()
 {
 	AActor* Owner = GetOwner();									// Store memory address of door into Owner
-	FRotator NewRotation = FRotator(0.f, -90.f, 0.f);				// Set yaw to close door
+	FRotator NewRotation = FRotator(0.f, 180.f, 0.f);			// Set door position to closed
 	Owner->SetActorRotation(NewRotation);
 }
 
@@ -40,7 +44,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	// Poll The Pressure Plate Trigger Volume
 	// If actor and pressure plate overlap (i.e. actor is inside the pressure plate), close the door
-	if (DoorClosePressurePlate->IsOverlappingActor(ActorThatCloses))
+	if (DoorClosePressurePlate->IsOverlappingActor(ActorThatClosesDoor))
 	{
 		CloseDoor();
 	}

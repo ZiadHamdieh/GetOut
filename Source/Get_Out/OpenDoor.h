@@ -36,7 +36,7 @@ private:
 	ATriggerVolume* DoorClosePressurePlate;	// Pressure plate that closes the door when player walks over it
 
 	UPROPERTY(EditAnywhere)
-	AActor* ActorThatCloses;
+	AActor* ActorThatClosesDoor;
 
 	
 };
