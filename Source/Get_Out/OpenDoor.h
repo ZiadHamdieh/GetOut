@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerVolume.h"
 #include "OpenDoor.generated.h"
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,6 +26,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	UPROPERTY(VisibleAnywhere)				// Macro for closing the door
+	float DoorAngle = 45.f;					// Set initial door angle to 45 deg
+
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume* DoorClosePressurePlate;	// Pressure plate that closes the door when player walks over it
+
 	
 };
