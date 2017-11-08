@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 
 
+
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -15,27 +16,25 @@ UOpenDoor::UOpenDoor()
 	// ...
 }
 
-
 // Called when the game starts
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Find the PlayerController
-	ActorThatClosesDoor = GetWorld()->GetFirstPlayerController()->GetPawn();
-
-	AActor* Owner = GetOwner();									// Store memory address of door into Owner
-	FRotator NewRotation = FRotator(0.f, -150.f, 0.f);			// Set yaw to close door
-	Owner->SetActorRotation(NewRotation);
+	Owner = GetOwner();															// Get owner of this script
+	ActorThatClosesDoor = GetWorld()->GetFirstPlayerController()->GetPawn();	// Set DefaultPawn (i.e. PlayerController) as actor that triggers door closure/opening
+	OpenDoor();
 }
 
 void UOpenDoor::CloseDoor()
 {
-	AActor* Owner = GetOwner();									// Store memory address of door into Owner
-	FRotator NewRotation = FRotator(0.f, 180.f, 0.f);			// Set door position to closed
-	Owner->SetActorRotation(NewRotation);
+	Owner->SetActorRotation(FRotator(0.f, DoorCloseAngle, 0.f));
 }
 
+void UOpenDoor::OpenDoor()
+{
+	Owner->SetActorRotation(FRotator(0.f, DoorOpenAngle, 0.f));
+}
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -47,6 +46,13 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (DoorClosePressurePlate->IsOverlappingActor(ActorThatClosesDoor))
 	{
 		CloseDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();		// set current time as the latest time that the door was open before getting closed
+	}
+	// Door Closing Delay
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	if (CurrentTime >= LastDoorOpenTime + DoorCloseDelay) 
+	{
+		OpenDoor();
 	}
 }
 
