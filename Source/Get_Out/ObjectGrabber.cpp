@@ -4,6 +4,8 @@
 #include "Gameframework/Actor.h"
 #include "Engine/World.h"
 
+#define OUT
+
 // Sets default values for this component's properties
 UObjectGrabber::UObjectGrabber()
 {
@@ -31,17 +33,13 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
+	/// Get Player's View Point every frame
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		PlayerViewPointLocation,							
-		PlayerViewPointRotation
-	);
-
-	UE_LOG(LogTemp, Warning, TEXT("Player's Location: %s, Looking: %s"),
-		*PlayerViewPointLocation.ToString(),
-		*PlayerViewPointRotation.ToString()
+		OUT PlayerViewPointLocation,							
+		OUT PlayerViewPointRotation
 	);
 	
-	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());		// Vector that indicates the player's reach
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());		// Vector that points to the player's reach
 	DrawDebugLine(
 		GetWorld(),
 		PlayerViewPointLocation,
@@ -52,5 +50,23 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		0.f,
 		7.5f
 	);
+
+	/// Query Parameters
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+
+	FHitResult Hit;
+	/// Ray-cast to player reach below
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+
+	/// Log the Actor Hit
+	AActor* ObjectHit = Hit.GetActor();
+	if (ObjectHit) UE_LOG(LogTemp, Warning, TEXT("Hitting Object: %s"), *(ObjectHit->GetName()))
+
 }
 
