@@ -22,10 +22,22 @@ void UObjectGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/// Search for the Physics Handle
+	FindPhysicsHandle();
+	SetupInputComponent();
+
+}
+
+
+// Search for the Physics Handle
+void UObjectGrabber::FindPhysicsHandle()
+{
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (!PhysicsHandle) UE_LOG(LogTemp, Error, TEXT("%s missing Physics Handle!"), *(GetOwner()->GetName()))
+}
 
+
+void UObjectGrabber::SetupInputComponent()
+{
 	/// Search for the Input Component
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if (!InputComponent) UE_LOG(LogTemp, Error, TEXT("%s missing Input Component!"), *(GetOwner()->GetName()))
@@ -37,41 +49,34 @@ void UObjectGrabber::BeginPlay()
 	}
 }
 
+
 void UObjectGrabber::GrabObject()
 {
-	UE_LOG(LogTemp, Error, TEXT("GRAB PRESSED"))
+	// Reach out to object
+	GetFirstPhysicsBody();
+	// Note only LINE TRACEing when we reach out for object. This is to optimize performance
+	// so the engine isn't getting overloaded with useless LINE TRACEing every frame unless we are trying to grab something
+
+	// If Object is close enough, attach PhysicsHandle
 }
 
 void UObjectGrabber::ReleaseObject()
 {
-	UE_LOG(LogTemp, Error, TEXT("GRAB RELEASED"))
+	// TODO release PhysicsHandle
 }
 
-// Called every frame
-void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+FHitResult UObjectGrabber::GetFirstPhysicsBody() const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
 	/// Get Player's View Point every frame
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,							
+		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotation
 	);
-	
-	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());		// Vector that points to the player's reach
-	DrawDebugLine(
-		GetWorld(),
-		PlayerViewPointLocation,
-		LineTraceEnd,
-		FColor(0, 255, 0),
-		false,
-		0.f,
-		0.f,
-		7.5f
-	);
+
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());
 
 	/// Query Parameters
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
@@ -89,6 +94,19 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	/// Log the Actor Hit
 	AActor* ObjectHit = Hit.GetActor();
 	if (ObjectHit) UE_LOG(LogTemp, Warning, TEXT("Hitting Object: %s"), *(ObjectHit->GetName()))
+	
+	return Hit;
+}
+
+// Called every frame
+void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	// If PhysicsHandle is attached, it means we are holding an object
+	// Move object that is being grabbed
+	
+
 
 }
 
