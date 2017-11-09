@@ -33,12 +33,18 @@ void UObjectGrabber::BeginPlay()
 	{
 		// Bind input axis
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UObjectGrabber::GrabObject);
+		InputComponent->BindAction("Grab", IE_Released, this, &UObjectGrabber::ReleaseObject);
 	}
 }
 
 void UObjectGrabber::GrabObject()
 {
+	UE_LOG(LogTemp, Error, TEXT("GRAB PRESSED"))
+}
 
+void UObjectGrabber::ReleaseObject()
+{
+	UE_LOG(LogTemp, Error, TEXT("GRAB RELEASED"))
 }
 
 // Called every frame

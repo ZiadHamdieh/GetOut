@@ -36,5 +36,8 @@ private:
 
 	// Ray-Cast and grab object if it is within player's reach
 	void GrabObject();
+	
+	// When Grab is released, this method gets called
+	void ReleaseObject();
 
 };
