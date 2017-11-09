@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "DrawDebugHelpers.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "ObjectGrabber.generated.h"
 
 
@@ -28,5 +29,7 @@ public:
 
 private:
 	float PlayerReach = 100.f;
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 };

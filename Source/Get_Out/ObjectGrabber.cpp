@@ -21,7 +21,10 @@ UObjectGrabber::UObjectGrabber()
 void UObjectGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	/// Search for the Physics Handle
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if(!PhysicsHandle) UE_LOG(LogTemp, Error, TEXT("%s missing Physics Handle!"), *(GetOwner()->GetName()))
 }
 
 
