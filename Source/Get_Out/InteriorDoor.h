@@ -40,7 +40,7 @@ private:
 		float DoorCloseAngle = -90.f;
 
 	UPROPERTY(EditAnywhere)
-		float DoorCloseDelay = .5f;					// Set time for door to close shut to 0.5 sec
+		float DoorCloseDelay = .75f;					// Set time for door to close shut to 0.5 sec
 		float LastDoorOpenTime;						// Variable for keeping track of the time the door was last open
 
 	UPROPERTY(EditAnywhere)
