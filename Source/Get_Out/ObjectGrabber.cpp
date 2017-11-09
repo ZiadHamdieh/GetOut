@@ -37,8 +37,20 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	);
 
 	UE_LOG(LogTemp, Warning, TEXT("Player's Location: %s, Looking: %s"),
-		*PlayerViewPointLocation.ToString(), 
+		*PlayerViewPointLocation.ToString(),
 		*PlayerViewPointRotation.ToString()
-	)
+	);
+	
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());		// Vector that indicates the player's reach
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(0, 255, 0),
+		false,
+		0.f,
+		0.f,
+		7.5f
+	);
 }
 
