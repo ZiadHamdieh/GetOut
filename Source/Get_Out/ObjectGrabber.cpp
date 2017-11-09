@@ -2,7 +2,7 @@
 
 #include "ObjectGrabber.h"
 #include "Gameframework/Actor.h"
-
+#include "Engine/World.h"
 
 // Sets default values for this component's properties
 UObjectGrabber::UObjectGrabber()
@@ -19,11 +19,6 @@ UObjectGrabber::UObjectGrabber()
 void UObjectGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FString ObjectName = GetOwner()->GetName();
-	FString ObjectPos = GetOwner()->GetActorTransform().GetLocation().ToString();
-
-	UE_LOG(LogTemp, Warning, TEXT("%s is at Position %s"), *ObjectName, *ObjectPos);
 	
 }
 
@@ -32,7 +27,18 @@ void UObjectGrabber::BeginPlay()
 void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
 
-	// ...
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		PlayerViewPointLocation,							
+		PlayerViewPointRotation
+	);
+
+	UE_LOG(LogTemp, Warning, TEXT("Player's Location: %s, Looking: %s"),
+		*PlayerViewPointLocation.ToString(), 
+		*PlayerViewPointRotation.ToString()
+	)
 }
 
