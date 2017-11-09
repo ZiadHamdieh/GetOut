@@ -25,15 +25,15 @@ void UObjectGrabber::BeginPlay()
 	/// Search for the Physics Handle
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (!PhysicsHandle) UE_LOG(LogTemp, Error, TEXT("%s missing Physics Handle!"), *(GetOwner()->GetName()))
+
+	/// Search for the Input Component
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (!InputComponent) UE_LOG(LogTemp, Error, TEXT("%s missing Input Component!"), *(GetOwner()->GetName()))
 	else
 	{
 		// Bind input axis
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UObjectGrabber::GrabObject);
 	}
-
-	/// Search for the Input Component
-	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (!InputComponent) UE_LOG(LogTemp, Error, TEXT("%s missing Input Component!"), *(GetOwner()->GetName()))
 }
 
 void UObjectGrabber::GrabObject()
