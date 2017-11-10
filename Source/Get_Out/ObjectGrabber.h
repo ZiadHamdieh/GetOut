@@ -39,11 +39,12 @@ private:
 
 	// Ray-Cast and grab object if it is within player's reach
 	void GrabObject();
-	
-	// When Grab is released, this method gets called
 	void ReleaseObject();
 
 	// Returns a hit for the first physics body that is within the player's reach
 	FHitResult GetNearestPhysicsBody() const;
 
+	// Helper methods that return the start & end of the player's reach vector
+	FVector GetReachVectorStart() const;
+	FVector GetReachVectorEnd() const;
 };
