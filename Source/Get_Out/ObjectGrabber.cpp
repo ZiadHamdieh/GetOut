@@ -53,30 +53,41 @@ void UObjectGrabber::SetupInputComponent()
 void UObjectGrabber::GrabObject()
 {
 	// Reach out to object
-	GetFirstPhysicsBody();
-	// Note only LINE TRACEing when we reach out for object. This is to optimize performance
-	// so the engine isn't getting overloaded with useless LINE TRACEing every frame unless we are trying to grab something
+	auto HitResult = GetNearestPhysicsBody();
+	auto ObjectToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
 
 	// If Object is close enough, attach PhysicsHandle
+	if (ActorHit) {
+		PhysicsHandle->GrabComponent(
+			ObjectToGrab,
+			NAME_None,
+			ObjectToGrab->GetOwner()->GetActorLocation(),
+			true												// True to allow grabbed object to rotate
+		);
+	}
+	
+											
 }
 
 void UObjectGrabber::ReleaseObject()
 {
-	// TODO release PhysicsHandle
+	PhysicsHandle->ReleaseComponent();
 }
 
-FHitResult UObjectGrabber::GetFirstPhysicsBody() const
+FHitResult UObjectGrabber::GetNearestPhysicsBody() const
 {
+
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
-	/// Get Player's View Point every frame
+	/// Get Player's View Point
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotation
 	);
 
-	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());	
 
 	/// Query Parameters
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
@@ -103,10 +114,25 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// If PhysicsHandle is attached, it means we are holding an object
-	// Move object that is being grabbed
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	/// Get Player's View Point
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerReach * PlayerViewPointRotation.Vector());
+
+	// If PhysicsHandle is attached, GrabbedComponent is not null,
+	// which it means we are holding an object.
+	if (PhysicsHandle->GrabbedComponent) {
+		// Move object that is being grabbed by setting
+		// its location to the LineTraceEnd, every frame.
+		PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
+
 	
-
-
 }
 

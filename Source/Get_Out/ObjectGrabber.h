@@ -44,6 +44,6 @@ private:
 	void ReleaseObject();
 
 	// Returns a hit for the first physics body that is within the player's reach
-	FHitResult GetFirstPhysicsBody() const;
+	FHitResult GetNearestPhysicsBody() const;
 
 };
