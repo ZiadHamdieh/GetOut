@@ -35,17 +35,18 @@ private:
 	// Macros below
 
 	UPROPERTY(VisibleAnywhere)
-		float DoorOpenAngle = -135.f;				// Set door opening angle to 45 deg
+		float DoorOpenAngle = -165.f;				// Set door opening angle to 45 deg
 	UPROPERTY(VisibleAnywhere)
 		float DoorCloseAngle = -90.f;
 
 	UPROPERTY(EditAnywhere)
-		float DoorCloseDelay = .75f;					// Set time for door to close shut to 0.5 sec
+		float DoorCloseDelay = .75f;				// Set time for door to close shut to 0.5 sec
+		float MinimumMassToOpenDoor = .1f;			// Minimum mass needed to trigger pressure plate (i.e. to open the door) (kg)	
 		float LastDoorOpenTime;						// Variable for keeping track of the time the door was last open
-
+	
 	UPROPERTY(EditAnywhere)
-		ATriggerVolume* DoorOpenPressurePlate;		// Pressure plate that closes the door when player walks over it
+	ATriggerVolume* DoorOpenPressurePlate;			// Pressure plate that closes the door when player walks over it
 
-	UPROPERTY(EditAnywhere)
-		AActor* ActorThatOpensDoor;					// Variable for keeping track of which actor is responsible for triggering door closure
+	float GetMassOnPlate();							// returns the total amount of mass currently on the pressure plate (kg)
+
 };

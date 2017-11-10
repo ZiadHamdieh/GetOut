@@ -3,8 +3,9 @@
 #include "InteriorDoor.h"
 #include "Gameframework/Actor.h"
 #include "Engine/World.h"
+#include "Components/PrimitiveComponent.h"
 
-
+#define OUT
 
 // Sets default values for this component's properties
 UInteriorDoor::UInteriorDoor()
@@ -22,7 +23,6 @@ void UInteriorDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();															// Get owner of this script
-	ActorThatOpensDoor = GetWorld()->GetFirstPlayerController()->GetPawn();	// Set DefaultPawn (i.e. PlayerController) as actor that triggers door closure/opening
 	OpenDoor();
 }
 
@@ -43,7 +43,7 @@ void UInteriorDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	// Poll The Pressure Plate Trigger Volume
 	// If actor and pressure plate overlap (i.e. actor is inside the pressure plate), close the door
-	if (DoorOpenPressurePlate->IsOverlappingActor(ActorThatOpensDoor))
+	if (GetMassOnPlate() > MinimumMassToOpenDoor)
 	{
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();		// set current time as the latest time that the door was open before getting closed
@@ -54,5 +54,18 @@ void UInteriorDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	{
 		CloseDoor();
 	}
+}
+
+float UInteriorDoor::GetMassOnPlate()
+{
+	TArray<AActor*> ActorsCurrentlyOnPlate;
+
+	float TotalMass = 0.f;
+	DoorOpenPressurePlate->GetOverlappingActors(OUT ActorsCurrentlyOnPlate);
+	// Iterate through TArray using a range-based for loop (recommended type of loop by UE4 standards)
+	for (const auto* Actor : ActorsCurrentlyOnPlate) {
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+	return TotalMass;
 }
 
