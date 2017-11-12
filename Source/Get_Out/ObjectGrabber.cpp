@@ -35,6 +35,7 @@ void UObjectGrabber::FindPhysicsHandle()
 void UObjectGrabber::SetupInputComponent()
 {
 	/// Search for the Input Component
+
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	if (!InputComponent) UE_LOG(LogTemp, Error, TEXT("%s missing Input Component!"), *(GetOwner()->GetName()))
 	else

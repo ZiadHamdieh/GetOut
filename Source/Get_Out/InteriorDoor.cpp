@@ -61,6 +61,7 @@ float UInteriorDoor::GetMassOnPlate()
 	TArray<AActor*> ActorsCurrentlyOnPlate;
 
 	float TotalMass = 0.f;
+	if (!DoorOpenPressurePlate) return;
 	DoorOpenPressurePlate->GetOverlappingActors(OUT ActorsCurrentlyOnPlate);
 	// Iterate through TArray using a range-based for loop (recommended type of loop by UE4 standards)
 	for (const auto* Actor : ActorsCurrentlyOnPlate) {
