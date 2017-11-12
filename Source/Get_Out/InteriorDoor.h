@@ -48,5 +48,4 @@ private:
 	ATriggerVolume* DoorOpenPressurePlate;			// Pressure plate that closes the door when player walks over it
 
 	float GetMassOnPlate();							// returns the total amount of mass currently on the pressure plate (kg)
-
 };
