@@ -44,6 +44,5 @@ private:
 		
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* DoorOpenPressurePlate = nullptr;// Pressure plate that closes the door when player walks over it
-	//float DoorCloseAngle = -90.f;
 	float GetMassOnPlate();							// returns the total amount of mass currently on the pressure plate (kg)
 };
