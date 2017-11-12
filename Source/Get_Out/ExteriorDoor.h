@@ -30,7 +30,7 @@ public:
 
 private:
 
-	AActor* Owner;								// Object that exhibits the behaviour defined in this class
+	AActor* Owner = nullptr;								// Object that exhibits the behaviour defined in this class
 
 	// Macros below
 
@@ -44,8 +44,8 @@ private:
 	float LastDoorOpenTime;						// Variable for keeping track of the time the door was last open
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* DoorClosePressurePlate;		// Pressure plate that closes the door when player walks over it
+	ATriggerVolume* DoorClosePressurePlate = nullptr;		// Pressure plate that closes the door when player walks over it
 
 	UPROPERTY(EditAnywhere)
-	AActor* ActorThatClosesDoor;				// Variable for keeping track of which actor is responsible for triggering door closure
+	AActor* ActorThatClosesDoor = nullptr;				// Variable for keeping track of which actor is responsible for triggering door closure
 };
