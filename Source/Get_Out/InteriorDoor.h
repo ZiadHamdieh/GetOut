@@ -8,7 +8,8 @@
 #include "InteriorDoor.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCloseRequest);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -24,34 +25,25 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void OpenDoor();
-	void CloseDoor();
-
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(BlueprintAssignable)
-	FOnOpenRequest OnOpenRequest;
+	FDoorEvent OnOpenRequest;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnCloseRequest;
 
 private:
 
 	AActor* Owner = nullptr;						// Object that exhibits the behaviour defined in this class
 
-	// Macros below
-
-	//UPROPERTY(VisibleAnywhere)
-		//float DoorOpenAngle = -165.f;				// Set door opening angle to 45 deg
-	UPROPERTY(VisibleAnywhere)
-		float DoorCloseAngle = -90.f;
-
 	UPROPERTY(EditAnywhere)
-		float DoorCloseDelay = .75f;				// Set time for door to close shut to 0.5 sec
-		float MinimumMassToOpenDoor = .1f;			// Minimum mass needed to trigger pressure plate (i.e. to open the door) (kg)	
-		float LastDoorOpenTime;						// Variable for keeping track of the time the door was last open
-	
+	float MinimumMassToOpenDoor = .1f;			// Minimum mass needed to trigger pressure plate (i.e. to open the door) (kg)	
+		
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* DoorOpenPressurePlate = nullptr;// Pressure plate that closes the door when player walks over it
-
+	//float DoorCloseAngle = -90.f;
 	float GetMassOnPlate();							// returns the total amount of mass currently on the pressure plate (kg)
 };

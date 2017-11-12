@@ -25,17 +25,6 @@ void UInteriorDoor::BeginPlay()
 	Owner = GetOwner();															// Get owner of this script
 }
 
-void UInteriorDoor::CloseDoor()
-{
-	Owner->SetActorRotation(FRotator(0.f, DoorCloseAngle, 0.f));
-}
-
-void UInteriorDoor::OpenDoor()
-{
-	//Owner->SetActorRotation(FRotator(0.f, DoorOpenAngle, 0.f));
-	OnOpenRequest.Broadcast();
-}
-
 // Called every frame
 void UInteriorDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -44,14 +33,11 @@ void UInteriorDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// Poll The Pressure Plate Trigger Volume
 	if (GetMassOnPlate() > MinimumMassToOpenDoor)				// If actor and pressure plate overlap (i.e. actor is inside the pressure plate), close the door
 	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();		// set current time as the latest time that the door was open before getting closed
+		OnOpenRequest.Broadcast();
 	}
-	// Door Closing Delay
-	float CurrentTime = GetWorld()->GetTimeSeconds();
-	if (CurrentTime >= LastDoorOpenTime + DoorCloseDelay)
+	else
 	{
-		CloseDoor();
+		OnCloseRequest.Broadcast();
 	}
 }
 

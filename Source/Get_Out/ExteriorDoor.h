@@ -24,9 +24,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void OpenDoor();
-	void CloseDoor();
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -38,20 +35,12 @@ private:
 
 	AActor* Owner = nullptr;								// Object that exhibits the behaviour defined in this class
 
-	// Macros below
-
 	UPROPERTY(VisibleAnywhere)				
-	float DoorOpenAngle = 110.f;				// initial door opening angle
-	//UPROPERTY(VisibleAnywhere)
-	//float DoorCloseAngle = 180.f;
-
-	UPROPERTY(EditAnywhere)
-	float DoorCloseDelay = .5f;					// Set time for door to close shut to 0.5 sec
-	float LastDoorOpenTime;						// Variable for keeping track of the time the door was last open
+	float InitialDoorAngle = 110.f;							// initial door opening angle
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* DoorClosePressurePlate = nullptr;		// Pressure plate that closes the door when player walks over it
 
 	UPROPERTY(EditAnywhere)
-	AActor* ActorThatClosesDoor = nullptr;				// Variable for keeping track of which actor is responsible for triggering door closure
+	AActor* ActorThatClosesDoor = nullptr;					// Variable for keeping track of which actor is responsible for triggering door closure
 };

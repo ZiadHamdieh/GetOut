@@ -23,18 +23,7 @@ void UExteriorDoor::BeginPlay()
 
 	Owner = GetOwner();															// Get owner of this script
 	ActorThatClosesDoor = GetWorld()->GetFirstPlayerController()->GetPawn();	// Set DefaultPawn (i.e. PlayerController) as actor that triggers door closure/opening
-	OpenDoor();
-}
-
-void UExteriorDoor::CloseDoor()
-{
-	//Owner->SetActorRotation(FRotator(0.f, DoorCloseAngle, 0.f));
-	OnCloseRequest.Broadcast();
-}
-
-void UExteriorDoor::OpenDoor()
-{
-	Owner->SetActorRotation(FRotator(0.f, DoorOpenAngle, 0.f));
+	Owner->SetActorRotation(FRotator(0.f, InitialDoorAngle, 0.f));
 }
 
 // Called every frame
@@ -46,7 +35,7 @@ void UExteriorDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// If actor and pressure plate overlap (i.e. actor is inside the pressure plate), close the door
 	if (DoorClosePressurePlate->IsOverlappingActor(ActorThatClosesDoor))
 	{
-		CloseDoor();
+		OnCloseRequest.Broadcast();
 	}
 }
 
