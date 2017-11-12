@@ -53,6 +53,7 @@ void UObjectGrabber::GrabObject()
 
 	// If Object is close enough, attach PhysicsHandle
 	if (ActorHit) {
+		if (!PhysicsHandle) return;
 		PhysicsHandle->GrabComponent(
 			ObjectToGrab,
 			NAME_None,											// 'bones' disabled
@@ -64,6 +65,7 @@ void UObjectGrabber::GrabObject()
 
 void UObjectGrabber::ReleaseObject()
 {
+	if (!PhysicsHandle) return;
 	PhysicsHandle->ReleaseComponent();
 }
 
@@ -95,6 +97,7 @@ void UObjectGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	FVector LineTraceEnd = GetReachVectorEnd();
 
+	if (!PhysicsHandle) return;
 	// If PhysicsHandle is attached, GrabbedComponent is not null,
 	// which it means we are holding an object.
 	if (PhysicsHandle->GrabbedComponent) {
