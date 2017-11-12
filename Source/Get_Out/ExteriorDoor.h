@@ -8,6 +8,9 @@
 #include "ExteriorDoor.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCloseRequest);
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GET_OUT_API UExteriorDoor : public UActorComponent
 {
@@ -28,6 +31,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnCloseRequest OnCloseRequest;
+
 private:
 
 	AActor* Owner = nullptr;								// Object that exhibits the behaviour defined in this class
@@ -35,9 +41,9 @@ private:
 	// Macros below
 
 	UPROPERTY(VisibleAnywhere)				
-	float DoorOpenAngle = 135.f;				// Set door opening angle to 45 deg
-	UPROPERTY(VisibleAnywhere)
-	float DoorCloseAngle = 180.f;
+	float DoorOpenAngle = 110.f;				// initial door opening angle
+	//UPROPERTY(VisibleAnywhere)
+	//float DoorCloseAngle = 180.f;
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = .5f;					// Set time for door to close shut to 0.5 sec

@@ -28,7 +28,8 @@ void UExteriorDoor::BeginPlay()
 
 void UExteriorDoor::CloseDoor()
 {
-	Owner->SetActorRotation(FRotator(0.f, DoorCloseAngle, 0.f));
+	//Owner->SetActorRotation(FRotator(0.f, DoorCloseAngle, 0.f));
+	OnCloseRequest.Broadcast();
 }
 
 void UExteriorDoor::OpenDoor()

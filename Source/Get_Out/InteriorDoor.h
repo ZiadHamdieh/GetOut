@@ -8,6 +8,9 @@
 #include "InteriorDoor.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class GET_OUT_API UInteriorDoor : public UActorComponent
 {
@@ -28,14 +31,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnOpenRequest OnOpenRequest;
+
 private:
 
 	AActor* Owner = nullptr;						// Object that exhibits the behaviour defined in this class
 
 	// Macros below
 
-	UPROPERTY(VisibleAnywhere)
-		float DoorOpenAngle = -165.f;				// Set door opening angle to 45 deg
+	//UPROPERTY(VisibleAnywhere)
+		//float DoorOpenAngle = -165.f;				// Set door opening angle to 45 deg
 	UPROPERTY(VisibleAnywhere)
 		float DoorCloseAngle = -90.f;
 
